@@ -139,11 +139,11 @@ code {
     cursor: pointer
 }
 
-/* .deck-container .deck,.deck-container .last-card {
+.deck-container .deck,.deck-container .last-card {
     background-size: cover;
     height: 190px;
     width: 130px
-}  */
+}  
 
 
 .deck {
@@ -153,7 +153,17 @@ code {
     width: 130px
 }
 
+.last-card{
+    display: none;
+    background-size: cover;
+    height: 190px;
+    width: 130px
+    
+}
 
+.image{
+    width: 100%;
+}
 
 .App {
     background-position: 50%;

@@ -8,6 +8,7 @@
     difficulty.classList.remove('active');
     shuffleBtn.classList.remove('shuffleButton');
     deckCardBack.classList.remove('visible');
+    lastCard.classList.remove('visible');
   });
 
 
@@ -20,6 +21,7 @@
       shuffleBtn.classList.remove('shuffleButton');
       deckCardBack.classList.remove('visible');
       difficulty.classList.remove('active');
+      lastCard.classList.remove('visible');
      }
     else {
       difficulty.classList.add('active');
@@ -27,21 +29,50 @@
     }
   });
 
-// вызов колоды карт рубашкой вверх
+
+  let arrFinal = [];  // финальный массив-стек
+
+
+  // ЗАМЕШИВАНИЕ КОЛОДЫ !!!!!!!!!!!!!!
   let deckCardBack = document.querySelector('.deck');
   shuffleBtn.addEventListener('click', () => {
     deckCardBack.classList.add('visible');
     shuffleBtn.classList.remove('shuffleButton');
-  })
+    // формирование итогового массива-стэка
+    arrFinal = [];   
+    arrFinal = arrFinal.concat(firstFinal(),secondFinal(),thirdFinal());
+      });
   
-// функция создания рандомного числа от min до max
+
+// вызов карты из сформированной колоды карт поочередно по одной на каждый клик
+let countCards = 0;
+let lastCard = document.querySelector('.last-card');
+let image = document.querySelector('.image');
+    
+deckCardBack.addEventListener('click', () => {
+   lastCard.classList.add('visible');
+   image.removeAttribute('src');
+   image.setAttribute('src', `${arrFinal[countCards].cardFace}`);
+   countCards++;
+  if (countCards > arrFinal.length - 1) {
+    deckCardBack.classList.remove('visible');
+    countCards = 0;
+  }
+
+});
+
+
+
+// ФУНКЦИИ ЗАМЕШИВАНИЯ И СОЗДАНИЯ КОЛОДЫ СОГЛАСНО СХЕМЕ ДРЕВНЕГО
+
+  // функция создания рандомного числа от min до max
   function randomNumber(min, max){
     return Math.floor(min + Math.random() * (max + 1 - min));
 }
 
 // импорт данных о схеме Древнего
 import ancientsCards from './data/ancients.js';
-// console.log(ancientsCards);
+
   
 // функция подсчета количества ЗЕЛЕНЫХ карт, требуемых по схеме Древнего
 function greenCards() {
@@ -66,6 +97,7 @@ function blueCards() {
   ancientsCards[0].thirdStage.blueCards;
   return blueSum;
 }
+
 
 // импорт данных о колодах карт
 import cardsDataGreen from './data/mythicCards/green/index.js'
@@ -108,20 +140,20 @@ function blueRandomArr(){
   let copyCards = [...cardsDataBlue]; // создать копию
   let max = copyCards.length-1;
   let blueSum = blueCards();
-  for (let i = 1; i <= blueSum; i++) {
+    for (let i = 1; i <= blueSum; i++) {
       let r = randomNumber(0, max);
       blueStopka.push(copyCards[r]);
       copyCards.splice(r, 1);
       max--;
+      
   }
   return blueStopka;
 } 
 
-
+// создание стопок-массивок карт участвующих в игре
 let  greenStopka = greenRandomArr();
 let  brownStopka = brownRandomArr();
 let  blueStopka = blueRandomArr();
-
 
 // !!!!!! ***********  !!!!!!!   *******************
 // функция создания предварительной колоды 1-го этапа схемы Древнего
@@ -130,29 +162,26 @@ function firstPrev(){
    let greenFirst = ancientsCards[0].firstStage.greenCards; //количество иттераций - количество зеленых карт 1-го уровня
    let brownFirst = ancientsCards[0].firstStage.brownCards;
    let blueFirst = ancientsCards[0].firstStage.blueCards;
-     
+
    for (let i = 1; i <= greenFirst; i++){  // помещение в массив 1-го уровня зеленых карт
       let max = greenStopka.length-1;
       let r = randomNumber(0,max);
       arrFirst.push(greenStopka[r]);
       greenStopka.splice(r, 1);
-      max--;
     }
     for (let i = 1; i <= brownFirst; i++){  // помещение в массив 1-го уровня RКОРИЧНЕВЫХ карт
       let max = brownStopka.length-1;
       let r = randomNumber(0,max);
       arrFirst.push(brownStopka[r]);
       brownStopka.splice(r, 1);
-      max--;
     }
     for (let i = 1; i <= blueFirst; i++){   // помещение в массив 1-го уровня ГОЛУБЫХ карт
       let max = blueStopka.length-1;
       let r = randomNumber(0,max);
       arrFirst.push(blueStopka[r]);
       blueStopka.splice(r, 1);
-      max--;
     }
-  return arrFirst;
+      return arrFirst;
 }
 
 // функция создания окончательной колоды 1-го этапа схемы Древнего
@@ -160,16 +189,17 @@ function firstFinal(){
 let arrFirstFinal =[];   // окончательная колода 1-го уровня созданная рандомно 
 let arrFirst = firstPrev();
 let firstQuantity = ancientsCards[0].firstStage.greenCards + ancientsCards[0].firstStage.brownCards + ancientsCards[0].firstStage.blueCards;
-  for (let i = 1; i <= firstQuantity; i++){ // кол-во иттераций - количество карт 1-го уровня
+  
+for (let i = 1; i <= firstQuantity; i++){ // кол-во иттераций - количество карт 1-го уровня
     let max = arrFirst.length-1;
     let r = randomNumber(0,max);
     arrFirstFinal.push(arrFirst[r]);
+    // console.log(arrFirst, r);
+    // console.log(arrFirstFinal);
     arrFirst.splice(r, 1);
-    max--;
   }
-  return arrFirstFinal;
+    return arrFirstFinal;
 }
-
 
 
 // !!!!!! ***********************  !!!!!!!!!!!!!!!!!!!
@@ -185,21 +215,21 @@ function secondPrev(){
      let r = randomNumber(0,max);
      arrSecond.push(greenStopka[r]);
      greenStopka.splice(r, 1);
-     max--;
+    
    }
    for (let i = 1; i <= brownSecond; i++){  // помещение в массив 1-го уровня RКОРИЧНЕВЫХ карт
      let max = brownStopka.length-1;
      let r = randomNumber(0,max);
      arrSecond.push(brownStopka[r]);
      brownStopka.splice(r, 1);
-     max--;
+    
    }
    for (let i = 1; i <= blueSecond; i++){   // помещение в массив 2-го уровня ГОЛУБЫХ карт
      let max = blueStopka.length-1;
      let r = randomNumber(0,max);
      arrSecond.push(blueStopka[r]);
      blueStopka.splice(r, 1);
-     max--;
+     
    }
  return arrSecond;
 }
@@ -215,18 +245,16 @@ function secondFinal(){
       let r = randomNumber(0,max);
       arrSecondFinal.push(arrSecond[r]);
       arrSecond.splice(r, 1);
-      max--;
+      
     }
     return arrSecondFinal;
   }
-
 
 
 // !!!!!!!!!!!  ******************!!!!!!!!!!!!!!!!!!
 // функция создания предварительной колоды 3-го этапа схемы Древнего
 function thirdPrev() {
 let arrThird =[];  // предварительная колода 3-го уровня
-let arrThirdFinal =[];
 let greenThird = ancientsCards[0].thirdStage.greenCards; //количество иттераций - количество зеленых карт 3-го уровня
   let brownThird = ancientsCards[0].thirdStage.brownCards;
   let blueThird = ancientsCards[0].thirdStage.blueCards;
@@ -248,27 +276,11 @@ function thirdFinal(){
       let r = randomNumber(0,max);
       arrThirdFinal.push(arrThird[r]);
       arrThird.splice(r, 1);
-      max--;
+     
     }
     return arrThirdFinal;
   }
  
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// формирование итогового массива-стэка
-let arrFinal = [];
-
-arrFinal = arrFinal.concat(firstFinal(),secondFinal(),thirdFinal());
-
-console.log(arrFinal);
-
-
-
-
-
-
-
-
 
 
 
