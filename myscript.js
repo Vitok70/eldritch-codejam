@@ -41,7 +41,8 @@
     // формирование итогового массива-стэка
     arrFinal = [];   
     arrFinal = arrFinal.concat(firstFinal(),secondFinal(),thirdFinal());
-      });
+    console.log(arrFinal);
+ });
   
 
 // вызов карты из сформированной колоды карт поочередно по одной на каждый клик
@@ -150,31 +151,38 @@ function blueRandomArr(){
   return blueStopka;
 } 
 
-// создание стопок-массивок карт участвующих в игре
-let  greenStopka = greenRandomArr();
-let  brownStopka = brownRandomArr();
-let  blueStopka = blueRandomArr();
+// перeменные стопок-массивов карт участвующих в игре
+let  greenStopka;
+let  brownStopka;
+let  blueStopka;
 
 // !!!!!! ***********  !!!!!!!   *******************
 // функция создания предварительной колоды 1-го этапа схемы Древнего
 function firstPrev(){
+// создание стопок-массивок карт участвующих в игре при клике на кнопку "Замешать колоду"
+   greenStopka = greenRandomArr(); 
+   brownStopka = brownRandomArr();
+   blueStopka = blueRandomArr();
+
    let arrFirst =[];  // предварительная колода 1-го уровня
    let greenFirst = ancientsCards[0].firstStage.greenCards; //количество иттераций - количество зеленых карт 1-го уровня
    let brownFirst = ancientsCards[0].firstStage.brownCards;
    let blueFirst = ancientsCards[0].firstStage.blueCards;
-
+  
    for (let i = 1; i <= greenFirst; i++){  // помещение в массив 1-го уровня зеленых карт
       let max = greenStopka.length-1;
       let r = randomNumber(0,max);
       arrFirst.push(greenStopka[r]);
       greenStopka.splice(r, 1);
     }
-    for (let i = 1; i <= brownFirst; i++){  // помещение в массив 1-го уровня RКОРИЧНЕВЫХ карт
+
+    for (let i = 1; i <= brownFirst; i++){  // помещение в массив 1-го уровня КОРИЧНЕВЫХ карт
       let max = brownStopka.length-1;
       let r = randomNumber(0,max);
       arrFirst.push(brownStopka[r]);
       brownStopka.splice(r, 1);
     }
+
     for (let i = 1; i <= blueFirst; i++){   // помещение в массив 1-го уровня ГОЛУБЫХ карт
       let max = blueStopka.length-1;
       let r = randomNumber(0,max);
@@ -194,8 +202,6 @@ for (let i = 1; i <= firstQuantity; i++){ // кол-во иттераций - к
     let max = arrFirst.length-1;
     let r = randomNumber(0,max);
     arrFirstFinal.push(arrFirst[r]);
-    // console.log(arrFirst, r);
-    // console.log(arrFirstFinal);
     arrFirst.splice(r, 1);
   }
     return arrFirstFinal;
@@ -296,9 +302,9 @@ function thirdFinal(){
  
 
 //   let arrFirst =[];  // предварительная колода 1-го уровня
-//   let color=['green', 'brown', 'blue']; // массив цветов карт
+//   let colorArr=['green', 'brown', 'blue']; // массив цветов карт
   
-//   color.forEach(color => {
+//   colorArr.forEach(color => {
 //     const colorWithCards = `${color}Cards`;
 //     let currentColorArr = stopkasArr[`${color}Stopka`];
 //     let max = ancientsCards[0].firstStage[colorWithCards];
